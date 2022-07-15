@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap");
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +12,35 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+.my_batch {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  gap:8px;
+  height: 400px;
+  overflow-y: scroll;
+}
+.my_batch::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+.my_batch li {
+  width: 100%;
+  background-color: rgba(34, 49, 92, 0.589);
+  padding: 1rem;
+  border-radius: 8px;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+.my_batch button {
+  height: 50px;
+  background-color: #5a9ae9;
+  outline: none;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 3rem;
 }
