@@ -36,11 +36,29 @@ code {
   flex-wrap: wrap;
   gap: 2rem;
 }
-.my_batch button {
+.my_batch .farm {
   height: 50px;
   background-color: #5a9ae9;
   outline: none;
   border: none;
+  color: #fff;
+
   border-radius: 8px;
   padding: 12px 3rem;
+}
+.my_batch .btn_1{
+  height: 50px;
+  color: #fff;
+  background-color: #fd4b4b;
+  outline: none;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 3rem;
+}
+button {
+  border:none;
+}
+button:disabled {
+  filter: brightness(0.5);
+  cursor: no-drop;
 }

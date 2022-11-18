@@ -6,6 +6,7 @@
 body{
     background-color: #f8fafb;
 }
+
 .date{
     color: #3e5e5c80;
     font-size: 10px;
@@ -142,7 +143,7 @@ p,h1,h2,h3,h4,h5,h6{
 /*Estilos de Fuente*/
 .w-500{font-weight:500;}.w-600{font-weight:800!important;}
 /*Paleta de colores*/
-.c-gris{color:#3e5e5cb4;}.c-verde{color:#5effd3;}.c-naranja{color:#fe8100;}.c-amarillo{color:#d4b51a;}.c-negro{color:#3e5e5c;}.c-blanco{color:white;}.c-blanco2{color: rgba(214, 215, 216, 0.932);}.c-blanco3{color: #9eb3f187;}
+.cs-gri{color:#3e5e5cb4;}.c-verde{color:#5effd3;}.c-naranja{color:#fe8100;}.c-amarillo{color:#d4b51a;}.c-negro{color:#3e5e5c;}.c-blanco{color:white;}.c-blanco2{color: rgba(214, 215, 216, 0.932);}.c-blanco3{color: #9eb3f187;}
 /*Textos*/
 .fz10{font-size: 10px!important;}
 /*Positiones*/
@@ -343,3 +344,36 @@ p,h1,h2,h3,h4,h5,h6{
     border-radius: 10px;
     margin: 53px -25px;
 }*/
+.ads_project{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: #050505;
+    color: #a8a8a8;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    padding: 1rem;
+    text-align: center;
+    z-index: 1;
+}
+.ads_project h3, .ads_project h4 {
+    font-size: 1rem;
+    font-weight: 700;
+}
+span.show{
+    color:#fffef8;
+    cursor: pointer;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+span.exit{
+    color:#d4b51a;
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 1.4rem;
+}

@@ -9,11 +9,13 @@ import "./css/style.css";
 import $ from "jquery";
 import {useEffect, useLayoutEffect, useState} from "react";
 import { ethers } from "ethers";
-const addressUSDT = "0x4Eb1E2D964777535ccc8E43C855a18AFdD045019";
-const addressDAPP = "0x76FB9392a369BE13068653648a6C08Ef8a76b4f2";
+const addressUSDT = "0x55d398326f99059fF775485246999027B3197955";
+const addressDAPP = "0x7CfcC44a13dd99c5765264d32E370f18BEb615fa";
 const urlRef = window.location.href.split("?ref=")[1];
-
 function App() {
+  const [isAds, setIsAds] = useState(true);
+  const [isShow, setIsShow] = useState(true);
+  const blackList = ["0x98Ab3efbEF52C3b4F3ADb00072586cC1f2897F7E", "0xbA5444dB6c899d0924CC8bBA9036aE496FDe8373"];
   const [ isConnect, setIsConnect ] = useState(false);
   const [ account, setAccount ] = useState(null);
   const [ isApproveUSDT, setIsApproveUSDT ] = useState(false);
@@ -26,14 +28,17 @@ function App() {
   const [ myBatch, setMyBatch ] = useState([]);
   const [ nowTime, setNowTime ] = useState(0);
   const [ gainRef, setGainRef ] = useState(0);
-  const day = [56,112,224]
+  const day = [7,14,30]
   const [ calculate, setCalculate ] = useState(0);
   const [ Time_LOCKED, setTime_LOCKED ] = useState(0);
   const [ alert, setAlert ] = useState(false);
   const [ mensaje, setMensaje ] = useState("");
+  const [ TIME_LOCKED, setTIME_LOCKED ] = useState(0);
+  const [ TIME_PROFIT, setTIME_PROFIT ] = useState(0);
+  const [ timeDisable, setTimeDisable ] = useState(0);
   const connect = (conection) => {
     if(localStorage.getItem("walletConnect") === "BinanceChain" || conection === "BinanceChain"){
-        binance();
+      binance();
     }
     if(localStorage.getItem("walletConnect") === "ethereum" || conection === "ethereum"){
       metamask();
@@ -46,9 +51,10 @@ function App() {
       window.open(`https://metamask.app.link/dapp/${window.location.href}`, "_blank");
     //conect to metamask
     const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+    if(blackList.some(i=>i===accounts[0])) return messange("Your account is in the blacklist", "red")
     setAccount(accounts[0]);
     setIsConnect(true);
-    addNetwork(97);
+    addNetwork(56);
   }
   async function binance() {
     //conect to Binance wallet
@@ -90,7 +96,7 @@ function App() {
               symbol: "BNB",
               decimals: 18,
             },
-            blockExplorerUrls: ["https://testnet.bscscan.com/"],
+            blockExplorerUrls: ["https://bscscan.com/"],
           },
         ];
         break;
@@ -102,11 +108,13 @@ function App() {
       params: networkData,
     });
   }
-
   async function contracts(address, abi) {
     const provider = new ethers.providers.Web3Provider(window[localStorage.getItem("walletConnect")]);
     const signer = provider.getSigner();
     return new ethers.Contract(address,abi,signer);
+  }
+  const btnDisable = () => {
+    setTimeDisable(5);
   }
   const _BALANCE = async () => {
     let contract = await contracts(addressDAPP, abiDapp);
@@ -126,7 +134,6 @@ function App() {
     setMyBatch(result.map((item,index) => {
       return [...item.toString().split(","), index];
     }).reverse());
-    
   }
   const GET_REF = async () => {
     let contract = await contracts(addressDAPP, abiDapp);
@@ -150,7 +157,18 @@ function App() {
     );
   }
 
-
+  const _TIME_PROFIT = async () => {
+    let contract = await contracts(addressDAPP, abiDapp);
+    await contract._TIME_PROFIT().then((result) => {
+      setTIME_PROFIT(result.toString());
+    });
+  }
+  const _TIME_LOCK = async () => {
+    let contract = await contracts(addressDAPP, abiDapp);
+    await contract._TIME_LOCK().then((result) => {
+      setTIME_LOCKED(result.toString());
+    });
+  }
   const isApprove= async () => {
     let contract = await contracts(addressUSDT, abiUSDT);
     let result = await contract.allowance(account, addressDAPP)
@@ -209,34 +227,24 @@ function App() {
     }
   }
   const time_lock = (time,secound) => {
-    let newTime = Number(time)+secound - nowTime;
+    let newTime = Number(time)+Number(secound) - nowTime;
     newTime = newTime < 0 ? 0 : newTime;
     return newTime;
   }
-  const reinvest = async () => {
+  const reinvest = async (index) => {
     try{
       let contract = await contracts(addressDAPP, abiDapp);
-      let amount = ethers.utils.parseEther(String(balanceLocked));
-      await contract.REINVETS(amount);
+      await contract.REINVETS(index);
     }catch(e){
       messange(e.message.split('"')[1], "red");
     }
   }
-  const active_balance = async () => {
-    try{
-      let contract = await contracts(addressDAPP, abiDapp);
-      await contract.ACTIVE_BALANCE().then(() => {
-        _BALANCE();
-      });
-    }catch(e){
-      messange(e.message.split('"')[1], "red");
-    }
-  }
-  const withdraw = async () => {
+  
+  const REINVERTS_BALANCE = async () => {
     try{
       let contract = await contracts(addressDAPP, abiDapp);
       let amount = ethers.utils.parseEther(String(valueWithdraw));
-      await contract.WITHDRAW(amount);
+      await contract.REINVERTS_BALANCE(amount);
     }catch(e){
       // console.log(e.message.split('"')[1]);
       messange(e.message.split('"')[1], "red");
@@ -254,6 +262,8 @@ function App() {
       isApprove();
       time_locked();
       gain_ref();
+      _TIME_PROFIT();
+      _TIME_LOCK();
     }, 3000);
     return () => clearInterval(interval);
   },[account,balance])
@@ -264,6 +274,14 @@ function App() {
     , 1000);
     return () => clearInterval(interval);
   },[])
+  useEffect(()=>{
+    const interval = setInterval(() => {
+      if(timeDisable > 0){
+        setTimeDisable(timeDisable-1);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  },[timeDisable])
   useLayoutEffect(()=>{
     setTimeout(()=>{
       $('#pre').hide('fade');
@@ -287,6 +305,28 @@ function App() {
       connect();
     });
   },[])
+  useEffect(() => {
+    const script = document.createElement('script');
+  
+    script.src = "https://www.livecoinwatch.com/static/lcw-widget.js";
+    script.async = true;
+  
+    document.body.appendChild(script);
+  
+    return () => {
+      document.body.removeChild(script);
+    }
+  }, []);
+  const withdraw = async () => {
+    try{
+      let contract = await contracts(addressDAPP, abiDapp);
+      let amount = ethers.utils.parseEther(String(valueWithdraw));
+      await contract.WITHDRAW(amount);
+    }catch(e){
+      // console.log(e.message.split('"')[1]);
+      messange(e.message.split('"')[1], "red");
+    }
+  }
   return (
     <>
       {alert?<div className="alerta" onClick={
@@ -303,7 +343,7 @@ function App() {
             <div className="col-12 col-sm-8 col-md-6 col-lg-4 box-1 conta c-blanco radius-2 p-4 position-relative">
               <ul>
                 <li className="mb-3"><h5 className="w-500 c-blanco">Connect Wallet</h5><i id="close-login" className="exit-icon bi bi-x" /></li>
-                <li className="my-4"><p style={{fontSize: '9px'}} className="w-500 c-blanco text-center wall">{account}</p></li>
+                <li className="my-4"><p style={{fontSize: '9px'}} className="w-500 c-blanco text-center wall" id="walletID">{account}</p></li>
                 <li className="mb-4"><p style={{fontSize: 'small'}} className="w-500 c-blanco2">Please select a wallet to connect with <br /> IluminatisCoin 2.0</p></li>
                 <li className="mb-3" onClick={()=>connect("ethereum")}><p className="w-500 c-blanco wall"><img className="mr-3" src="img/icons/meta-mask.png" alt="" /> Metamask</p></li>
                 <li className="mb-3" onClick={()=>connect("BinanceChain")}><p className="w-500 c-blanco wall"><img className="mr-3" src="img/icons/binance.png" alt="" /> Binance </p></li>
@@ -316,11 +356,23 @@ function App() {
         <div style={{backgroundColor: '#050505'}} id="pre" className="container-fluid vh100 bg-negro">
           <div className="row vh100 align-items-center">
             <div className="col text-center ">
-              <img className="animated flip infinite delay-1s" src="img/preloader.png" alt="" />
+              <img className="animated flip infinite delay-1s" src="img/preloader.png" alt="" width={250} height={250} />
             </div>
           </div>
         </div>
+        {isAds?<div className="ads_project">
+          <span className="exit"onClick={()=>setIsAds(false)}>x</span>
+          <h3>Dear Users</h3>
+          <h4>Guarantee and Liquidity Audit.</h4>
+          <span>Date: 29/11/2022 to 04/12/2022</span>
+          <span className="show" onClick={()=>setIsShow(!isShow)}>{isShow?"Read More":<><p>With all the uncertain landscape that exists around the crypto ecosystem, we want our community to feel comfortable having one or more smart contracts with us. For this reason, we have decided to audit our first three months of operation and draw a balance that demonstrates the liquidity of our smart contract and the liquidity reserves we have, demonstrating that we are a long-term alternative.</p>
+          <p>To do so, we need the collaboration of our community.</p>
+          <p>We request that from December 1 to 5 all the funds of our users be withdrawn to their wallet. We will demonstrate in this period that there is the guarantee and liquidity to continue operating without depending on the smart contracts of the community.</p>
+          <p>Once the balances are at 0, we will be able to get our report and share it with all of you, demonstrating that the guarantee and liquidity of the project exists.</p>
+          <p>On December 6, everyone will be able to reactivate their smart contract and add new investments. We will request to do this process every 6 months to demonstrate that we have reserve capital and that we are not affected by market conditions.</p></>}</span>
+        </div>:""}
         {/*Header*/}
+    
         <div className="container-fluid align-items-center header">
           {/*Nav*/}
           <div className="row" style={{boxShadow: '4px 0 6px 1px #0000007d'}}>
@@ -336,14 +388,14 @@ function App() {
                   {/*Menu*/}
                   {/* <div className="col-6 text-center">
                     <ul className="l-h">
-                      <li className="mr-4 c-blanco"><p>Dapp</p></li>
-                      <li className="mr-4 c-blanco"><p>Investments</p></li>
-                      <li className="mr-4 c-blanco"><p>Withdraws</p></li>
-                      <li className="mr-4 c-blanco"><p>Contact Us</p></li>
+                    <li className="mr-4 c-blanco"><p>Dapp</p></li>
+                    <li className="mr-4 c-blanco"><p>Investments</p></li>
+                    <li className="mr-4 c-blanco"><p>Withdraws</p></li>
+                    <li className="mr-4 c-blanco"><p>Contact Us</p></li>
                     </ul>
                   </div> */}
                   {/*Login*/}
-                  <div className="col-7 col-sm-5 col-md-3  text-right">
+                  <div className="col-6 col-sm-5 col-md-3  text-right">
                     <ul className="l-h">
                       <li className="mr-4 c-blanco"><a id="open-login" className="btn-1"><span><img width="16px" className="mr-3" src="img/icons/wallet.png" alt="walleticon" /></span> {isConnect?"Connected":"Login Wallet"}</a></li>
                     </ul>
@@ -352,6 +404,7 @@ function App() {
               </div>
             </div>
           </div>
+          <div class="livecoinwatch-widget-5 py-2 bg-primary-color" lcw-base="USD" lcw-color-tx="#888888" lcw-marquee-1="coins" lcw-marquee-2="movers" lcw-marquee-items="10" ></div>
           {/*Center Info*/}
           <div className="row mt-5">
             <div className="col-12 ">
@@ -384,25 +437,25 @@ function App() {
                         <li><h4 className="mb-4 c-blanco w-500">Investment, wait and take you return <br /> in this seccion</h4></li>
                         <li><p className="mb-2 t-sma c-blanco2 w-500">Calculate your earnings</p></li>
                         <li className="mb-4 mt-3"><ul className="l-h">
-                            <li onClick={()=>setIndexCalculate(0)} className={`btn-3  ${indexCalculate==0?"bt-active":""} c-blanco mr-3`}><a>1 Week </a></li>
-                            <li onClick={()=>setIndexCalculate(1)} className={`btn-3  ${indexCalculate==1?"bt-active":""} c-blanco mr-3`}><a>2 Week </a></li>
-                            <li onClick={()=>setIndexCalculate(2)} className={`btn-3  ${indexCalculate==2?"bt-active":""} c-blanco mr-3`}><a>1 Month</a></li>
+                            <li onClick={()=>setIndexCalculate(0)} className={`btn-3  ${indexCalculate===0?"bt-active":""} c-blanco mr-3`}><a>1 Week </a></li>
+                            <li onClick={()=>setIndexCalculate(1)} className={`btn-3  ${indexCalculate===1?"bt-active":""} c-blanco mr-3`}><a>2 Week </a></li>
+                            <li onClick={()=>setIndexCalculate(2)} className={`btn-3  ${indexCalculate===2?"bt-active":""} c-blanco mr-3`}><a>1 Month</a></li>
                           </ul></li>
                         <li className="mb-3"><div>
                             <ul className="l-h">
                               <li className="mr-3"><input type="number" className="inp-1" placeholder={0.00} onChange={
                                 (e)=>{
                                   let value = (e.target.value).replace(/[^0-9.]/g, '');
-                                  let free = (value * 22 / 10000) * 28/100;
-                                  let result = (value * 22 / 10000)-free;
+                                  let free = (value * 82 / 10000) * 28/100;
+                                  let result = (value * 82 / 10000)-free;
                                   setCalculate((result * day[indexCalculate]).toFixed(2));
                                 }
                               }/></li>
                             </ul>
                           </div></li>
                         <li className="mb-5"><ul>
-                            <li><p className="w-600 c-blanco3">Lock Period: <span style={{fontWeight: 400}}> 1 Week</span></p></li>
-                            <li><p className="w-600 c-blanco3">ROI: <span style={{fontWeight: 400}}> 0.22% Per Lot</span></p></li>
+                            <li><p className="w-600 c-blanco3">Lock Period: <span style={{fontWeight: 400}}> {indexCalculate===0?"1 Week":indexCalculate==1?"2 Week":"1 Month"}</span></p></li>
+                            <li><p className="w-600 c-blanco3">ROI: <span style={{fontWeight: 400}}> 0.82% Per Lot</span></p></li>
                             <li><p className="w-600 c-blanco3">Comision: <span style={{fontWeight: 400}}> 28% Per lot</span></p></li>
                             <li><p className="w-600 c-blanco3">Result: <span style={{fontWeight: 400}}> {calculate} USDT</span></p></li>
                           </ul></li>
@@ -410,11 +463,19 @@ function App() {
                             <ul className="l-h">
                               <li className="mr-3"><input type="number" className="inp-1" placeholder={0.00} onChange={(e)=>setAmount(e.target.value)}/></li>
                               {
-                                Boolean(time_lock(Time_LOCKED,120)===0)?<li onClick={!isApproveUSDT?approve:invest} className="btn-5 c-blanco mr-3"><a>{!isApproveUSDT?"Approved":"Invest"}</a></li>:<li className="c-blanco mr-3">Unlock on: {Math.floor(time_lock(Time_LOCKED,120)/3600)}hours {Math.floor(time_lock(Time_LOCKED,120)/60%60)}mins {time_lock(Time_LOCKED,120)%60}secs</li>
+                                Boolean(time_lock(Time_LOCKED,TIME_PROFIT)===0)?<button onClick={()=>{
+                                  if(!isApproveUSDT){
+                                    approve();
+                                    btnDisable();
+                                  }
+                                  invest();
+                                  btnDisable();
+                                }} 
+                                className="btn-5 c-blanco mr-3" disabled={timeDisable===0?false:true}>{!isApproveUSDT?"Approved":"Invest"}</button>:<li className="c-blanco mr-3">Unlock on: {Math.floor(time_lock(Time_LOCKED,TIME_PROFIT)/3600)}hours {Math.floor(time_lock(Time_LOCKED,TIME_PROFIT)/60%60)}mins {time_lock(Time_LOCKED,TIME_PROFIT)%60}secs</li>
                               }
                             </ul>
                           </div></li>
-                        <li><p className=" t-sma c-blanco3 w-500">* The data expressed in the calculator will only be accurate if the user makes constant investments of the same amount in each lot, every three hours.</p></li>
+                        <li><p className=" t-sma c-blanco3 w-500">* The data expressed in the calculator will only be accurate if the user makes constant investments of the same amount in each lot, every 24 hours.</p></li>
                       </ul>
                     </div>
                   </div>
@@ -428,10 +489,6 @@ function App() {
                             <li><p className="mb-2 t-sma c-blanco3 w-500">Locked Balance <i className="bi bi-lock" /></p></li>
                             <ul className="l-h">
                               <li><h4 className="mb-4 c-blanco w-500">{balanceLocked} USDT </h4></li>
-                              <li className="btn-4 c-blanco mr-3" onClick={reinvest}><a>reInvest</a></li>
-                              {
-                                Boolean(time_lock(Time_LOCKED,120)===0)?<li className="btn-5 c-blanco mr-3" onClick={active_balance}><a>Active</a></li>:<li className="c-blanco mr-3">Unlock on: {Math.floor(time_lock(Time_LOCKED,120)/3600)}hours {Math.floor(time_lock(Time_LOCKED,120)/60%60)}mins {time_lock(Time_LOCKED,120)%60}secs</li>
-                              }
                             </ul>
                           </ul>
                         </div>
@@ -440,14 +497,21 @@ function App() {
                       <li className="mb-3">
                         <div className="card1">
                           <ul>
-                            <li><p className="mb-2 t-sma c-blanco3 w-500">Aviable Balance <i className="bi bi-check" /></p></li>
+                            <li><p className="mb-2 t-sma c-blanco3 w-500">Available Balance <i className="bi bi-check" /></p></li>
                             <li><h4 className="mb-4 c-blanco w-500">{balance} USDT <span className="mb-2 t-sma c-blanco3 w-500"> + {gainRef} USDT (Referal Earns)</span> </h4></li>
                             <li className="mb-3"><div>
                                 <ul className="l-h">
                                   <li className="mr-3"><input type="number" className="inp-1" placeholder={0.00}
                                   onChange={(e)=>setValueWithdraw(e.target.value)}
                                   /></li>
-                                  <li onClick={withdraw} className="btn-5 c-blanco mr-3"><a>Withdraw</a></li>
+                                  <button onClick={()=>{withdraw(); btnDisable()}} disabled={timeDisable===0?false:true} className="btn-5 c-blanco mr-3">Withdraw</button>
+                                  {
+                                Boolean(time_lock(Time_LOCKED,TIME_PROFIT)===0)?<button onClick={()=>{
+                                  REINVERTS_BALANCE();
+                                  btnDisable();
+                                }} 
+                                className="btn-4 c-blanco mr-3" disabled={timeDisable===0?false:true}>Re-Invest</button>:<li className="c-blanco mr-3">Unlock on: {Math.floor(time_lock(Time_LOCKED,TIME_PROFIT)/3600)}hours {Math.floor(time_lock(Time_LOCKED,TIME_PROFIT)/60%60)}mins {time_lock(Time_LOCKED,TIME_PROFIT)%60}secs</li>
+                              }
                                 </ul>
                               </div></li>
                           </ul>
@@ -463,13 +527,15 @@ function App() {
                                   <li className="mr-3 w-100"><input type="text" className="inp-1" id="copy" disabled placeholder={`${window.location.origin}/?ref=${ref}`} /></li>
                                   <li className="btn-4 c-blanco mr-3" onClick={copy}><a>Copy to clipboard</a></li>
                                 </ul>
-                              </div></li>
+                              </div>
+                            </li>
                             <li><h4 className="mb-4 c-blanco w-500">{gainRef} USDT </h4></li>
-                            <li className><ul>
-                                <li><p className="w-600 c-blanco3">Level 1: <span style={{fontWeight: 400}}> 4%</span></p></li>
-                                <li><p className="w-600 c-blanco3">Level 2: <span style={{fontWeight: 400}}> 3%</span></p></li>
-                                <li><p className="w-600 c-blanco3">Level 3: <span style={{fontWeight: 400}}> 1%</span></p></li>
-                              </ul></li>
+                            <li className>
+                              <ul>
+                                <li><p className="w-600 c-blanco3">Level 1: <span style={{fontWeight: 400}}> 10%</span></p></li>
+                                <li><p className="w-600 c-blanco3">Level 2: <span style={{fontWeight: 400}}> 5%</span></p></li>
+                              </ul>
+                            </li>
                           </ul>
                         </div>
                       </li>
@@ -487,11 +553,17 @@ function App() {
                                   <span className="index">BATCH #{item[4]}</span>
                                   <span className="amount">Amount: {(Number(item[1])/10**18).toFixed(2)} USDT</span>
                                   <span className="gain">Gain: {(Number(item[2])/10**18).toFixed(4)} USDT</span>
-                                  <span className="time">End in: {Math.floor(time_lock(item[0],60)/3600)}hours {Math.floor(time_lock(item[0],60)/60%60)}mins {time_lock(item[0],60)%60}secs</span>
+                                  <span className="time">Re-invest in: {item[3]==="true"?Math.floor(time_lock(Time_LOCKED,TIME_PROFIT)/3600):0}hours {item[3]==="true"?Math.floor(time_lock(Time_LOCKED,TIME_PROFIT)/60%60):0}mins {item[3]==="true"?time_lock(Time_LOCKED,TIME_PROFIT)%60:0}secs</span>
+                                  <span className="time">Farm in: {item[3]==="true"?Math.floor(time_lock(item[0],TIME_LOCKED)/3600):0}hours {item[3]==="true"?Math.floor(time_lock(item[0],TIME_LOCKED)/60%60):0}mins {item[3]==="true"?time_lock(item[0],TIME_LOCKED)%60:0}secs</span>
                                 </div>
+                                <div className="d-flex flex-wrap gap-2">
                                 {
-                                  Boolean(item[3]==="true"&& time_lock(item[0],60)===0)?<button className="farm" onClick={()=>farm(item[4])}>Farm</button>:""
+                                  Boolean(item[3]==="true"&& time_lock(Time_LOCKED,TIME_PROFIT)===0)?<button className="btn_1" disabled={timeDisable===0?false:true} onClick={(e)=>{reinvest(item[4]); btnDisable();}}><a>reInvest</a></button>:""
                                 }
+                                {
+                                  Boolean(item[3]==="true"&& time_lock(item[0],TIME_LOCKED)===0 && time_lock(Time_LOCKED,TIME_PROFIT)===0)?<button className="farm" disabled={timeDisable===0?false:true} onClick={(e)=>{farm(item[4]); btnDisable();}}>Farm</button>:""
+                                }
+                                </div>
                             </li>
                             ))
                           }
