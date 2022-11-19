@@ -368,6 +368,12 @@ p,h1,h2,h3,h4,h5,h6{
     bottom: 0;
     border-radius: 1.5rem;
 }
+.ads_project h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #d4b51a;
+    margin-bottom: 1rem;
+}
 .ads_project h3, .ads_project h4 {
     font-size: 1rem;
     font-weight: 700;
