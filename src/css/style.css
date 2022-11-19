@@ -394,3 +394,20 @@ span.exit{
     top: 10px;
     font-size: 1.4rem;
 }
+@media screen and (max-width:400px) {
+    .ads_project h2 {
+        font-size: 1.2rem;
+    }
+    .ads_project h3, .ads_project h4 {
+        font-size: 0.8rem;
+    }
+    .ads_project{
+        font-size: 0.6rem;
+    }
+}
+@media screen and (max-height:550px) {
+    .ads_project{
+        height: 100%;
+        padding: 0 8px;
+    }
+}
