@@ -14,7 +14,6 @@ const addressDAPP = "0x7CfcC44a13dd99c5765264d32E370f18BEb615fa";
 const urlRef = window.location.href.split("?ref=")[1];
 function App() {
   const [isAds, setIsAds] = useState(true);
-  const [isShow, setIsShow] = useState(true);
   const blackList = ["0x98Ab3efbEF52C3b4F3ADb00072586cC1f2897F7E", "0xbA5444dB6c899d0924CC8bBA9036aE496FDe8373"];
   const [ isConnect, setIsConnect ] = useState(false);
   const [ account, setAccount ] = useState(null);
@@ -365,12 +364,13 @@ function App() {
           <h3>Dear Users</h3>
           <h4>Guarantee and Liquidity Audit.</h4>
           <span>Date: 29/11/2022 to 04/12/2022</span>
-          <span className="show" onClick={()=>setIsShow(!isShow)}>{isShow?"Read More":<><p>With all the uncertain landscape that exists around the crypto ecosystem, we want our community to feel comfortable having one or more smart contracts with us. For this reason, we have decided to audit our first three months of operation and draw a balance that demonstrates the liquidity of our smart contract and the liquidity reserves we have, demonstrating that we are a long-term alternative.</p>
+          <span className="show"><p>With all the uncertain landscape that exists around the crypto ecosystem, we want our community to feel comfortable having one or more smart contracts with us. For this reason, we have decided to audit our first three months of operation and draw a balance that demonstrates the liquidity of our smart contract and the liquidity reserves we have, demonstrating that we are a long-term alternative.</p>
           <p>To do so, we need the collaboration of our community.</p>
           <p>We request that from December 1 to 5 all the funds of our users be withdrawn to their wallet. We will demonstrate in this period that there is the guarantee and liquidity to continue operating without depending on the smart contracts of the community.</p>
           <p>Once the balances are at 0, we will be able to get our report and share it with all of you, demonstrating that the guarantee and liquidity of the project exists.</p>
-          <p>On December 6, everyone will be able to reactivate their smart contract and add new investments. We will request to do this process every 6 months to demonstrate that we have reserve capital and that we are not affected by market conditions.</p></>}</span>
-        </div>:""}
+          <p>On December 6, everyone will be able to reactivate their smart contract and add new investments. We will request to do this process every 6 months to demonstrate that we have reserve capital and that we are not affected by market conditions.</p></span>
+        </div>
+        :null}
         {/*Header*/}
     
         <div className="container-fluid align-items-center header">
