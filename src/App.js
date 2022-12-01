@@ -10,7 +10,7 @@ import $ from "jquery";
 import {useEffect, useLayoutEffect, useState} from "react";
 import { ethers } from "ethers";
 const addressUSDT = "0x394653e1A30053676E8F57D005Ff36dB8d582989";
-const addressDAPP = "0x03885096862Cf403f6372bCC10e9A8CE5Dc1F77C";
+const addressDAPP = "0x14daA0c333306d10465b9e4e9cBFFf4BBb1b289f";
 const urlRef = window.location.href.split("?ref=")[1];
 function App() {
   const [isAds, setIsAds] = useState(true);
