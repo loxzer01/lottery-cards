@@ -9,8 +9,8 @@ import "./css/style.css";
 import $ from "jquery";
 import {useEffect, useLayoutEffect, useState} from "react";
 import { ethers } from "ethers";
-const addressUSDT = "0x55d398326f99059fF775485246999027B3197955";
-const addressDAPP = "0x7CfcC44a13dd99c5765264d32E370f18BEb615fa";
+const addressUSDT = "0x394653e1A30053676E8F57D005Ff36dB8d582989";
+const addressDAPP = "0x9426CB7b3bd8A6e4E9934b209c134cd4EF34BD43";
 const urlRef = window.location.href.split("?ref=")[1];
 function App() {
   const [isAds, setIsAds] = useState(true);
@@ -29,7 +29,6 @@ function App() {
   const [ gainRef, setGainRef ] = useState(0);
   const day = [7,14,30]
   const [ calculate, setCalculate ] = useState(0);
-  const [ Time_LOCKED, setTime_LOCKED ] = useState(0);
   const [ alert, setAlert ] = useState(false);
   const [ mensaje, setMensaje ] = useState("");
   const [ TIME_LOCKED, setTIME_LOCKED ] = useState(0);
@@ -53,7 +52,7 @@ function App() {
     if(blackList.some(i=>i===accounts[0])) return messange("Your account is in the blacklist", "red")
     setAccount(accounts[0]);
     setIsConnect(true);
-    addNetwork(56);
+    addNetwork(97);
   }
   async function binance() {
     //conect to Binance wallet
@@ -141,13 +140,6 @@ function App() {
     }
     );
   }
-  const time_locked = async () => {
-    let contract = await contracts(addressDAPP, abiDapp);
-    await contract._TIME_LOCKED(account).then((result) => {
-      setTime_LOCKED(result.toString());
-    }
-    );
-  }
   const gain_ref = async () => {
     let contract = await contracts(addressDAPP, abiDapp);
     await contract._GAIN_REF(account).then((result) => {
@@ -197,7 +189,8 @@ function App() {
       let amount = ethers.utils.parseEther(String(1000000000));
       await contract.approve(addressDAPP, amount)
     }catch(e){
-      messange(e.message,"red");
+      console.log(e.messange)
+      // messange(e.message,"red");
     }
   }
   
@@ -220,7 +213,7 @@ function App() {
   const farm = async (index) => {
     try{
       let contract = await contracts(addressDAPP, abiDapp);
-      await contract.FARM(index);
+      await contract.PROFIT(index);
     }catch(e){
       messange(e.message.split('"')[1], "red");
     }
@@ -259,7 +252,6 @@ function App() {
       MY_BATCH_ALL();
       GET_REF();
       isApprove();
-      time_locked();
       gain_ref();
       _TIME_PROFIT();
       _TIME_LOCK();
@@ -305,13 +297,14 @@ function App() {
     });
   },[])
   useEffect(() => {
+    // messange("Investments available until the new contract", "red");/
     const script = document.createElement('script');
   
     script.src = "https://www.livecoinwatch.com/static/lcw-widget.js";
     script.async = true;
   
     document.body.appendChild(script);
-  
+    // messange("Investments available until the new contract", "red")
     return () => {
       document.body.removeChild(script);
     }
@@ -369,7 +362,7 @@ function App() {
           <p>With all the uncertain landscape that exists around the crypto ecosystem, we want our community to feel comfortable having one or more smart contracts with us. For this reason, we have decided to audit our first three months of operation and draw a balance that demonstrates the liquidity of our smart contract, demonstrating that we are a long-term alternative.</p>
           <p>To do so, we need the collaboration of our community.</p>
           <p>We request that from 28/11/2022 all 04/12/2022 all the funds of our users be withdrawn to their wallet. We will demonstrate in this period that there is the guarantee and liquidity to continue operating without depending on the smart contracts of the community.</p>
-          <p>Once the balances are at 0, we will be able to get our report and share it with all of you, demonstrating that the guarantee and liquidity of the project exists.Once the balances are at 0, we will be able to get our report and share it with all of you, demonstrating that the guarantee and liquidity of the project exists.</p>
+          <p>Once the balances are at 0, we will be able to get our report and share it with all of you, demonstrating that the guarantee and liquidity of the project exists.</p>
           <p>On December 6, everyone will be able to reactivate their smart contract and add new investments. We will request to do this process every 6 months to demonstrate that we have reserve capital and that we are not affected by market conditions.</p></span>
        </div>
         :null}
@@ -382,7 +375,7 @@ function App() {
               <div className="container">
                 <div className="row  nav align-items-center justify-content-between">
                   {/*Logo*/}
-                  <div className="col-3">
+                  <div className="col-2">
                     <ul className="l-h">
                       <li className="mr-4"><img src="img/logo-light.png" width="50px" alt="Logo" /></li>
                     </ul>
@@ -397,7 +390,7 @@ function App() {
                     </ul>
                   </div> */}
                   {/*Login*/}
-                  <div className="col-6 col-sm-5 col-md-3  text-right">
+                  <div className="col-8 col-sm-5 col-md-3  text-right textFontpequeña">
                     <ul className="l-h">
                       <li className="mr-4 c-blanco"><a id="open-login" className="btn-1"><span><img width="16px" className="mr-3" src="img/icons/wallet.png" alt="walleticon" /></span> {isConnect?"Connected":"Login Wallet"}</a></li>
                     </ul>
@@ -406,7 +399,7 @@ function App() {
               </div>
             </div>
           </div>
-          <div class="livecoinwatch-widget-5 py-2 bg-primary-color" lcw-base="USD" lcw-color-tx="#888888" lcw-marquee-1="coins" lcw-marquee-2="movers" lcw-marquee-items="10" ></div>
+          <div className="livecoinwatch-widget-5 py-2 bg-primary-color" lcw-base="USD" lcw-color-tx="#888888" lcw-marquee-1="coins" lcw-marquee-2="movers" lcw-marquee-items="10" ></div>
           {/*Center Info*/}
           <div className="row mt-5">
             <div className="col-12 ">
@@ -464,17 +457,15 @@ function App() {
                         <li className="mb-3"><div>
                             <ul className="l-h">
                               <li className="mr-3"><input type="number" className="inp-1" placeholder={0.00} onChange={(e)=>setAmount(e.target.value)}/></li>
-                              {
-                                Boolean(time_lock(Time_LOCKED,TIME_PROFIT)===0)?<button onClick={()=>{
+                              <button onClick={()=>{
                                   if(!isApproveUSDT){
                                     approve();
                                     btnDisable();
                                   }
                                   invest();
                                   btnDisable();
-                                }} 
-                                className="btn-5 c-blanco mr-3" disabled={timeDisable===0?false:true}>{!isApproveUSDT?"Approved":"Invest"}</button>:<li className="c-blanco mr-3">Unlock on: {Math.floor(time_lock(Time_LOCKED,TIME_PROFIT)/3600)}hours {Math.floor(time_lock(Time_LOCKED,TIME_PROFIT)/60%60)}mins {time_lock(Time_LOCKED,TIME_PROFIT)%60}secs</li>
-                              }
+                                }}
+                                className="btn-5 c-blanco mr-3" disabled={timeDisable===0?false:true}>{!isApproveUSDT?"Approved":"Invest"}</button>
                             </ul>
                           </div></li>
                         <li><p className=" t-sma c-blanco3 w-500">* The data expressed in the calculator will only be accurate if the user makes constant investments of the same amount in each lot, every 24 hours.</p></li>
@@ -507,13 +498,11 @@ function App() {
                                   onChange={(e)=>setValueWithdraw(e.target.value)}
                                   /></li>
                                   <button onClick={()=>{withdraw(); btnDisable()}} disabled={timeDisable===0?false:true} className="btn-5 c-blanco mr-3">Withdraw</button>
-                                  {
-                                Boolean(time_lock(Time_LOCKED,TIME_PROFIT)===0)?<button onClick={()=>{
+                                <button onClick={()=>{
                                   REINVERTS_BALANCE();
                                   btnDisable();
                                 }} 
-                                className="btn-4 c-blanco mr-3" disabled={timeDisable===0?false:true}>Re-Invest</button>:<li className="c-blanco mr-3">Unlock on: {Math.floor(time_lock(Time_LOCKED,TIME_PROFIT)/3600)}hours {Math.floor(time_lock(Time_LOCKED,TIME_PROFIT)/60%60)}mins {time_lock(Time_LOCKED,TIME_PROFIT)%60}secs</li>
-                              }
+                                className="btn-4 c-blanco mr-3" disabled={timeDisable===0?false:true}>Re-Invest</button>
                                 </ul>
                               </div></li>
                           </ul>
@@ -550,20 +539,20 @@ function App() {
                         <ul className="d-flex my_batch">
                           {
                             myBatch.map((item)=>(
-                              <li key={item[4]} className="d-flex flex-row">
+                              <li key={item[5]} className="d-flex flex-row">
                                 <div className="c-blanco t-sma d-flex flex-column">
-                                  <span className="index">BATCH #{item[4]}</span>
-                                  <span className="amount">Amount: {(Number(item[1])/10**18).toFixed(2)} USDT</span>
-                                  <span className="gain">Gain: {(Number(item[2])/10**18).toFixed(4)} USDT</span>
-                                  <span className="time">Re-invest in: {item[3]==="true"?Math.floor(time_lock(Time_LOCKED,TIME_PROFIT)/3600):0}hours {item[3]==="true"?Math.floor(time_lock(Time_LOCKED,TIME_PROFIT)/60%60):0}mins {item[3]==="true"?time_lock(Time_LOCKED,TIME_PROFIT)%60:0}secs</span>
-                                  <span className="time">Farm in: {item[3]==="true"?Math.floor(time_lock(item[0],TIME_LOCKED)/3600):0}hours {item[3]==="true"?Math.floor(time_lock(item[0],TIME_LOCKED)/60%60):0}mins {item[3]==="true"?time_lock(item[0],TIME_LOCKED)%60:0}secs</span>
+                                  <span className="index">BATCH #{item[5]}</span>
+                                  <span className="amount">Amount: {(Number(item[2])/10**18).toFixed(2)} USDT</span>
+                                  <span className="gain">Gain: {(Number(item[3])/10**18).toFixed(4)} USDT</span>
+                                  <span className="time">Re-invest in: {item[4]==="true"?Math.floor(time_lock(item[1],TIME_PROFIT)/3600):0}hours {item[4]==="true"?Math.floor(time_lock(item[1],TIME_PROFIT)/60%60):0}mins {item[4]==="true"?time_lock(item[1],TIME_PROFIT)%60:0}secs</span>
+                                  <span className="time">Farm in: {item[4]==="true"?Math.floor(time_lock(item[0],TIME_LOCKED)/3600):0}hours {item[4]==="true"?Math.floor(time_lock(item[0],TIME_LOCKED)/60%60):0}mins {item[4]==="true"?time_lock(item[0],TIME_LOCKED)%60:0}secs</span>
                                 </div>
                                 <div className="d-flex flex-wrap gap-2">
                                 {
-                                  Boolean(item[3]==="true"&& time_lock(Time_LOCKED,TIME_PROFIT)===0)?<button className="btn_1" disabled={timeDisable===0?false:true} onClick={(e)=>{reinvest(item[4]); btnDisable();}}><a>reInvest</a></button>:""
+                                  Boolean(item[4]==="true"&& time_lock(item[1],TIME_PROFIT)<=0)?<button className="btn_1" disabled={timeDisable===0?false:true} onClick={(e)=>{reinvest(item[5]); btnDisable();}}><a>reInvest</a></button>:""
                                 }
                                 {
-                                  Boolean(item[3]==="true"&& time_lock(item[0],TIME_LOCKED)===0 && time_lock(Time_LOCKED,TIME_PROFIT)===0)?<button className="farm" disabled={timeDisable===0?false:true} onClick={(e)=>{farm(item[4]); btnDisable();}}>Farm</button>:""
+                                  Boolean(item[4]==="true"&& time_lock(item[1],TIME_PROFIT)<=0 && time_lock(item[0],TIME_PROFIT)<=0)?<button className="farm" disabled={timeDisable===0?false:true} onClick={(e)=>{farm(item[5]); btnDisable();}}>Farm</button>:""
                                 }
                                 </div>
                             </li>

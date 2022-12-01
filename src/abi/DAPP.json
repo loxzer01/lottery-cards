@@ -5,20 +5,29 @@
 				"internalType": "contract ERC20",
 				"name": "addressUSDT",
 				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_owner",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_liquidity",
-				"type": "address"
 			}
 		],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "_INVESTER",
+		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -42,26 +51,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "_GAIN",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "_INVERTER",
+		"name": "_PROFIT",
 		"type": "event"
 	},
 	{
@@ -82,32 +72,6 @@
 		],
 		"name": "_WITHDRAW",
 		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "CHANGE_OWNER",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
-			}
-		],
-		"name": "FARM",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"inputs": [
@@ -138,14 +102,22 @@
 				"internalType": "uint8",
 				"name": "ref",
 				"type": "uint8"
-			},
-			{
-				"internalType": "uint8[3]",
-				"name": "ref_array",
-				"type": "uint8[3]"
 			}
 		],
 		"name": "PERCENTAGE_CHANGE",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "PROFIT",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -180,12 +152,12 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "profit",
+				"name": "lock",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "lock",
+				"name": "profit",
 				"type": "uint256"
 			}
 		],
@@ -197,49 +169,12 @@
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "index",
-				"type": "uint256"
-			}
-		],
-		"name": "VIEW_GAIN",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "uint256",
 				"name": "amount",
 				"type": "uint256"
 			}
 		],
 		"name": "WITHDRAW",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "WITHDRAW_OWNER",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -344,6 +279,11 @@
 					},
 					{
 						"internalType": "uint256",
+						"name": "TIME_REINVEST",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
 						"name": "AMOUNT",
 						"type": "uint256"
 					},
@@ -358,7 +298,7 @@
 						"type": "bool"
 					}
 				],
-				"internalType": "struct Dapp.BATCH",
+				"internalType": "struct Cointainer.BATCH",
 				"name": "",
 				"type": "tuple"
 			}
@@ -385,6 +325,11 @@
 					},
 					{
 						"internalType": "uint256",
+						"name": "TIME_REINVEST",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
 						"name": "AMOUNT",
 						"type": "uint256"
 					},
@@ -399,7 +344,7 @@
 						"type": "bool"
 					}
 				],
-				"internalType": "struct Dapp.BATCH[]",
+				"internalType": "struct Cointainer.BATCH[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -459,14 +404,8 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "account",
-				"type": "address"
-			}
-		],
-		"name": "_TIME_LOCKED",
+		"inputs": [],
+		"name": "_TIME_PROFIT",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -479,7 +418,44 @@
 	},
 	{
 		"inputs": [],
-		"name": "_TIME_PROFIT",
+		"name": "GAIN_TIME",
+		"outputs": [
+			{
+				"internalType": "uint8",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "PERCENTAGE_REF",
+		"outputs": [
+			{
+				"internalType": "uint8",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "VIEW_GAIN",
 		"outputs": [
 			{
 				"internalType": "uint256",

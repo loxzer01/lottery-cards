@@ -410,4 +410,7 @@ span.exit{
         height: 100%;
         padding: 0 8px;
     }
+    .textFontpequeña{
+        font-size: 12px;
+    }
 }
