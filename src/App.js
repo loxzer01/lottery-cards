@@ -10,7 +10,7 @@ import $ from "jquery";
 import {useEffect, useLayoutEffect, useState} from "react";
 import { ethers } from "ethers";
 const addressUSDT = "0x394653e1A30053676E8F57D005Ff36dB8d582989";
-const addressDAPP = "0x9426CB7b3bd8A6e4E9934b209c134cd4EF34BD43";
+const addressDAPP = "0x03885096862Cf403f6372bCC10e9A8CE5Dc1F77C";
 const urlRef = window.location.href.split("?ref=")[1];
 function App() {
   const [isAds, setIsAds] = useState(true);
@@ -552,7 +552,7 @@ function App() {
                                   Boolean(item[4]==="true"&& time_lock(item[1],TIME_PROFIT)<=0)?<button className="btn_1" disabled={timeDisable===0?false:true} onClick={(e)=>{reinvest(item[5]); btnDisable();}}><a>reInvest</a></button>:""
                                 }
                                 {
-                                  Boolean(item[4]==="true"&& time_lock(item[1],TIME_PROFIT)<=0 && time_lock(item[0],TIME_PROFIT)<=0)?<button className="farm" disabled={timeDisable===0?false:true} onClick={(e)=>{farm(item[5]); btnDisable();}}>Farm</button>:""
+                                  Boolean(item[4]==="true" && time_lock(item[0],TIME_LOCKED)<=0 && time_lock(item[1],TIME_PROFIT)<=0)?<button className="farm" disabled={timeDisable===0?false:true} onClick={(e)=>{farm(item[5]); btnDisable();}}>Farm</button>:""
                                 }
                                 </div>
                             </li>
