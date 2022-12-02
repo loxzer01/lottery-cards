@@ -321,13 +321,14 @@ p,h1,h2,h3,h4,h5,h6{
     position:fixed;
     background-color: #363636;
     transition: all 0.5s ease;
+    z-index: 999999999999;
 }
-/* .red{
+.red{
     background-color: #cc0000;
 }
 .green{
     background-color: #108310;
-} */
+}
 /*MediaQuery l-h
 @media (min-width:576px){
 	.lpo-r{

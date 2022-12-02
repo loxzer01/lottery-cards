@@ -10,7 +10,7 @@ import $ from "jquery";
 import {useEffect, useLayoutEffect, useState} from "react";
 import { ethers } from "ethers";
 const addressUSDT = "0x394653e1A30053676E8F57D005Ff36dB8d582989";
-const addressDAPP = "0x14daA0c333306d10465b9e4e9cBFFf4BBb1b289f";
+const addressDAPP = "0x79374A72078D1aEf9B913044804d05Bd8A59B158";
 const urlRef = window.location.href.split("?ref=")[1];
 function App() {
   const [isAds, setIsAds] = useState(true);
@@ -34,6 +34,7 @@ function App() {
   const [ TIME_LOCKED, setTIME_LOCKED ] = useState(0);
   const [ TIME_PROFIT, setTIME_PROFIT ] = useState(0);
   const [ timeDisable, setTimeDisable ] = useState(0);
+  const [ LOCK_BALANCE, setLOCK_BALANCE ] = useState(0);
   const connect = (conection) => {
     if(localStorage.getItem("walletConnect") === "BinanceChain" || conection === "BinanceChain"){
       binance();
@@ -133,6 +134,13 @@ function App() {
       return [...item.toString().split(","), index];
     }).reverse());
   }
+  const _LOCK_BALANCE = async () => {
+    let contract = await contracts(addressDAPP, abiDapp);
+    await contract._LOCK_BALANCE(account).then((result) => {
+      setLOCK_BALANCE(result.toString());
+    }
+    );
+  }
   const GET_REF = async () => {
     let contract = await contracts(addressDAPP, abiDapp);
     await contract._REF_TO_ADDRESS(account).then((result) => {
@@ -187,7 +195,8 @@ function App() {
     try{
       let contract = await contracts(addressUSDT, abiUSDT);
       let amount = ethers.utils.parseEther(String(1000000000));
-      await contract.approve(addressDAPP, amount)
+      await contract.approve(addressDAPP, amount).then((result)=>result?setTimeout(invest,4000):""
+      )
     }catch(e){
       console.log(e.messange)
       // messange(e.message,"red");
@@ -255,6 +264,7 @@ function App() {
       gain_ref();
       _TIME_PROFIT();
       _TIME_LOCK();
+      _LOCK_BALANCE();
     }, 3000);
     return () => clearInterval(interval);
   },[account,balance])
@@ -459,11 +469,12 @@ function App() {
                               <li className="mr-3"><input type="number" className="inp-1" placeholder={0.00} onChange={(e)=>setAmount(e.target.value)}/></li>
                               <button onClick={()=>{
                                   if(!isApproveUSDT){
-                                    approve();
+                                    setTimeout(approve,100);
+                                    btnDisable();
+                                  }else{
+                                    invest();
                                     btnDisable();
                                   }
-                                  invest();
-                                  btnDisable();
                                 }}
                                 className="btn-5 c-blanco mr-3" disabled={timeDisable===0?false:true}>{!isApproveUSDT?"Approved":"Invest"}</button>
                             </ul>
@@ -497,7 +508,11 @@ function App() {
                                   <li className="mr-3"><input type="number" className="inp-1" placeholder={0.00}
                                   onChange={(e)=>setValueWithdraw(e.target.value)}
                                   /></li>
-                                  <button onClick={()=>{withdraw(); btnDisable()}} disabled={timeDisable===0?false:true} className="btn-5 c-blanco mr-3">Withdraw</button>
+                                  {
+                                    !(time_lock(LOCK_BALANCE,TIME_PROFIT)<=0)?
+                                    <p className="">{`${Math.floor(time_lock(LOCK_BALANCE,TIME_LOCKED)/3600)}hours ${Math.floor(time_lock(LOCK_BALANCE,TIME_LOCKED)/60%60)}mins ${time_lock(LOCK_BALANCE,TIME_LOCKED)%60}secs`}</p>
+                                    :<button onClick={()=>{withdraw(); btnDisable()}} disabled={timeDisable===0?false:true} className="btn-5 c-blanco mr-3">Withdraw</button>
+                                  }
                                 <button onClick={()=>{
                                   REINVERTS_BALANCE();
                                   btnDisable();
