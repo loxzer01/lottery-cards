@@ -10,7 +10,7 @@ import $ from "jquery";
 import {useEffect, useLayoutEffect, useState} from "react";
 import { ethers } from "ethers";
 const addressUSDT = "0x394653e1A30053676E8F57D005Ff36dB8d582989";
-const addressDAPP = "0x79374A72078D1aEf9B913044804d05Bd8A59B158";
+const addressDAPP = "0x047801646C48fE8D51F08cbd49813094600cF921";
 const urlRef = window.location.href.split("?ref=")[1];
 function App() {
   const [isAds, setIsAds] = useState(true);
@@ -362,7 +362,7 @@ function App() {
             </div>
           </div>
         </div>
-        {isAds?<div className="ads_project">
+        {/* {isAds?<div className="ads_project">
           <span className="exit"onClick={()=>setIsAds(false)}>x</span>
           <h2>Important Announcement</h2>
           <h3>Dear Users</h3>
@@ -375,7 +375,7 @@ function App() {
           <p>Once the balances are at 0, we will be able to get our report and share it with all of you, demonstrating that the guarantee and liquidity of the project exists.</p>
           <p>On December 6, everyone will be able to reactivate their smart contract and add new investments. We will request to do this process every 6 months to demonstrate that we have reserve capital and that we are not affected by market conditions.</p></span>
        </div>
-        :null}
+        :null} */}
         {/*Header*/}
     
         <div className="container-fluid align-items-center header">
