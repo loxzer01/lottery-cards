@@ -510,7 +510,7 @@ function App() {
                                   /></li>
                                   {
                                     !(time_lock(LOCK_BALANCE,TIME_PROFIT)<=0)?
-                                    <p className="">{`${Math.floor(time_lock(LOCK_BALANCE,TIME_LOCKED)/3600)}hours ${Math.floor(time_lock(LOCK_BALANCE,TIME_LOCKED)/60%60)}mins ${time_lock(LOCK_BALANCE,TIME_LOCKED)%60}secs`}</p>
+                                    <p className="c-blanco2">{`${Math.floor(time_lock(LOCK_BALANCE,TIME_PROFIT)/3600)}hours ${Math.floor(time_lock(LOCK_BALANCE,TIME_PROFIT)/60%60)}mins ${time_lock(LOCK_BALANCE,TIME_PROFIT)%60}secs`}</p>
                                     :<button onClick={()=>{withdraw(); btnDisable()}} disabled={timeDisable===0?false:true} className="btn-5 c-blanco mr-3">Withdraw</button>
                                   }
                                 <button onClick={()=>{
