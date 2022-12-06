@@ -9,8 +9,8 @@ import "./css/style.css";
 import $ from "jquery";
 import {useEffect, useLayoutEffect, useState} from "react";
 import { ethers } from "ethers";
-const addressUSDT = "0x394653e1A30053676E8F57D005Ff36dB8d582989";
-const addressDAPP = "0x047801646C48fE8D51F08cbd49813094600cF921";
+const addressUSDT = "0x55d398326f99059fF775485246999027B3197955";
+const addressDAPP = "0xaC92D5726c464d4D4dE05c944E6Ae0e58eF048fC";
 const urlRef = window.location.href.split("?ref=")[1];
 function App() {
   const [isAds, setIsAds] = useState(true);
@@ -53,7 +53,7 @@ function App() {
     if(blackList.some(i=>i===accounts[0])) return messange("Your account is in the blacklist", "red")
     setAccount(accounts[0]);
     setIsConnect(true);
-    addNetwork(97);
+    addNetwork(56);
   }
   async function binance() {
     //conect to Binance wallet
@@ -358,7 +358,7 @@ function App() {
         <div style={{backgroundColor: '#050505'}} id="pre" className="container-fluid vh100 bg-negro">
           <div className="row vh100 align-items-center">
             <div className="col text-center ">
-              <img className="animated flip infinite delay-1s" src="img/preloader.png" alt="" width={250} height={250} />
+              <img className="animated flip infinite delay-1s" src="img/logo-light.png" alt="" width={250} height={250} />
             </div>
           </div>
         </div>
