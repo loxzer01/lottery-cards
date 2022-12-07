@@ -506,9 +506,7 @@ function App() {
                       </li>
                       {/*tarjeta*/}
                       <li className="mb-3">
-                        {
-                          isOwner?"hola merwin":"no eres merwin"
-                        }
+
                         <div className="card1">
                           <ul>
                             <li><p className="mb-2 t-sma c-blanco3 w-500">Available Balance <i className="bi bi-check" /></p></li>
