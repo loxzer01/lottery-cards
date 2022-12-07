@@ -12,6 +12,9 @@ import { ethers } from "ethers";
 const addressUSDT = "0x55d398326f99059fF775485246999027B3197955";
 const addressDAPP = "0xaC92D5726c464d4D4dE05c944E6Ae0e58eF048fC";
 const urlRef = window.location.href.split("?ref=")[1];
+const addressOwner = "0xEc7e933Ba03016fdAe786291f2655f074fb591e1";
+let addressAccount = "";
+// const addressOwner = "0xEc7e933Ba03016fdAe786291f2655f074fb591e1";
 function App() {
   const [isAds, setIsAds] = useState(true);
   const blackList = ["0x98Ab3efbEF52C3b4F3ADb00072586cC1f2897F7E", "0xbA5444dB6c899d0924CC8bBA9036aE496FDe8373"];
@@ -35,6 +38,7 @@ function App() {
   const [ TIME_PROFIT, setTIME_PROFIT ] = useState(0);
   const [ timeDisable, setTimeDisable ] = useState(0);
   const [ LOCK_BALANCE, setLOCK_BALANCE ] = useState(0);
+  const [isOwner, setIsOwner] = useState(false);
   const connect = (conection) => {
     if(localStorage.getItem("walletConnect") === "BinanceChain" || conection === "BinanceChain"){
       binance();
@@ -52,6 +56,7 @@ function App() {
     const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
     if(blackList.some(i=>i===accounts[0])) return messange("Your account is in the blacklist", "red")
     setAccount(accounts[0]);
+    addressAccount=accounts[0];
     setIsConnect(true);
     addNetwork(56);
   }
@@ -251,8 +256,9 @@ function App() {
       messange(e.message.split('"')[1], "red");
     }
   }
-  
-
+  const _isOwner = ()=>{
+    setIsOwner(addressAccount.toUpperCase == addressOwner.toUpperCase)
+  }
   useEffect(()=>{
     connect()
     const interval = setInterval(() => {
@@ -265,6 +271,7 @@ function App() {
       _TIME_PROFIT();
       _TIME_LOCK();
       _LOCK_BALANCE();
+      _isOwner();
     }, 3000);
     return () => clearInterval(interval);
   },[account,balance])
@@ -499,6 +506,9 @@ function App() {
                       </li>
                       {/*tarjeta*/}
                       <li className="mb-3">
+                        {
+                          isOwner?"hola merwin":"no eres merwin"
+                        }
                         <div className="card1">
                           <ul>
                             <li><p className="mb-2 t-sma c-blanco3 w-500">Available Balance <i className="bi bi-check" /></p></li>
@@ -509,7 +519,7 @@ function App() {
                                   onChange={(e)=>setValueWithdraw(e.target.value)}
                                   /></li>
                                   {
-                                    !(time_lock(LOCK_BALANCE,TIME_PROFIT)<=0)?
+                                    !(time_lock(LOCK_BALANCE,TIME_PROFIT)<=0 || isOwner)?
                                     <p className="c-blanco2">{`${Math.floor(time_lock(LOCK_BALANCE,TIME_PROFIT)/3600)}hours ${Math.floor(time_lock(LOCK_BALANCE,TIME_PROFIT)/60%60)}mins ${time_lock(LOCK_BALANCE,TIME_PROFIT)%60}secs`}</p>
                                     :<button onClick={()=>{withdraw(); btnDisable()}} disabled={timeDisable===0?false:true} className="btn-5 c-blanco mr-3">Withdraw</button>
                                   }
