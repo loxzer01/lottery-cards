@@ -12,8 +12,7 @@ import { ethers } from "ethers";
 const addressUSDT = "0x55d398326f99059fF775485246999027B3197955";
 const addressDAPP = "0xaC92D5726c464d4D4dE05c944E6Ae0e58eF048fC";
 const urlRef = window.location.href.split("?ref=")[1];
-const addressOwner = "0xEc7e933Ba03016fdAe786291f2655f074fb591e1";
-let addressAccount = "";
+const addressOwner = "0x772E13dfA48ace1c3C68763A0a199d19219f2E09";
 // const addressOwner = "0xEc7e933Ba03016fdAe786291f2655f074fb591e1";
 function App() {
   const [isAds, setIsAds] = useState(true);
@@ -56,7 +55,6 @@ function App() {
     const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
     if(blackList.some(i=>i===accounts[0])) return messange("Your account is in the blacklist", "red")
     setAccount(accounts[0]);
-    addressAccount=accounts[0];
     setIsConnect(true);
     addNetwork(56);
   }
@@ -257,7 +255,7 @@ function App() {
     }
   }
   const _isOwner = ()=>{
-    setIsOwner(addressAccount.toUpperCase == addressOwner.toUpperCase)
+    setIsOwner(account.toUpperCase() == addressOwner.toUpperCase())
   }
   useEffect(()=>{
     connect()
