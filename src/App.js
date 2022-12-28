@@ -336,7 +336,7 @@ function App() {
   }
   
   const [time, setTime ] = useState(0);
-  const dicBanner = [["https://containerfusion.com","1"],["https://iluminatiscoin2-0.com/","2"]]
+  const dicBanner = [["https://iluminatiscoin2-0.com/","1"],["https://iluminatiscoin2-0.com/","2"]]
   useEffect(()=>{
     setTimeout(()=>{
         if(time === 1){
