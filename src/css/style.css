@@ -415,3 +415,12 @@ span.exit{
         font-size: 12px;
     }
 }
+.banner img {
+    max-width: 750px;
+    width: 100%;
+}
+.banner{
+    display: grid;
+    place-content: center;
+    padding: 2rem ;
+}

@@ -1,10 +1,10 @@
 import "font-awesome/css/font-awesome.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "mdbootstrap/css/mdb.min.css";
+// import "bootstrap/css/mdb.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import "bootstrap/dist/js/bootstrap.min.js";
 import abiUSDT from "./abi/USDT.json";
 import abiDapp from "./abi/DAPP.json";
-import "bootstrap/dist/js/bootstrap.min.js";
 import "./css/style.css";
 import $ from "jquery";
 import {useEffect, useLayoutEffect, useState} from "react";
@@ -334,6 +334,19 @@ function App() {
       messange(e.message.split('"')[1], "red");
     }
   }
+  
+  const [time, setTime ] = useState(0);
+  const dicBanner = [["https://containerfusion.com","1"],["https://iluminatiscoin2-0.com/","2"]]
+  useEffect(()=>{
+    setTimeout(()=>{
+        if(time === 1){
+            setTime(0)
+        }else{
+            
+            setTime(time+1)
+        }
+    }, 7000)
+},[time])
   return (
     <>
       {alert?<div className="alerta" onClick={
@@ -417,6 +430,11 @@ function App() {
           <div className="livecoinwatch-widget-5 py-2 bg-primary-color" lcw-base="USD" lcw-color-tx="#888888" lcw-marquee-1="coins" lcw-marquee-2="movers" lcw-marquee-items="10" ></div>
           {/*Center Info*/}
           <div className="row mt-5">
+              <div className="col-12 banner">
+                <a href={dicBanner[time][0]} target="_blank">
+                    <img src={`./img/banner-${dicBanner[time][1]}.png`} />
+                </a>
+              </div>
             <div className="col-12 ">
               <div className="container">
                 <div className="row text-center">
