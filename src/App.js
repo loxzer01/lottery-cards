@@ -337,16 +337,16 @@ function App() {
   
   const [time, setTime ] = useState(0);
   const dicBanner = [["https://iluminatiscoin2-0.com/","1"],["https://iluminatiscoin2-0.com/","2"]]
-  useEffect(()=>{
-    setTimeout(()=>{
-        if(time === 1){
-            setTime(0)
-        }else{
+//   useEffect(()=>{
+//     setTimeout(()=>{
+//         if(time === 1){
+//             setTime(0)
+//         }else{
             
-            setTime(time+1)
-        }
-    }, 7000)
-},[time])
+//             setTime(time+1)
+//         }
+//     }, 7000)
+// },[time])
   return (
     <>
       {alert?<div className="alerta" onClick={
