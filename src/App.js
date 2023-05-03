@@ -490,7 +490,7 @@ function App() {
                         <li className="mb-3"><div>
                             <ul className="l-h">
                               <li className="mr-3"><input type="number" className="inp-1" placeholder={0.00} onChange={(e)=>setAmount(e.target.value)}/></li>
-                              <button onClick={()=>{
+                              {/* <button onClick={()=>{
                                   if(!isApproveUSDT){
                                     setTimeout(approve,100);
                                     btnDisable();
@@ -499,7 +499,7 @@ function App() {
                                     btnDisable();
                                   }
                                 }}
-                                className="btn-5 c-blanco mr-3" disabled={timeDisable===0?false:true}>{!isApproveUSDT?"Approved":"Invest"}</button>
+                                className="btn-5 c-blanco mr-3" disabled={timeDisable===0?false:true}>{!isApproveUSDT?"Approved":"Invest"}</button> */}
                             </ul>
                           </div></li>
                         <li><p className=" t-sma c-blanco3 w-500">* The data expressed in the calculator will only be accurate if the user makes constant investments of the same amount in each lot, every 24 hours.</p></li>
