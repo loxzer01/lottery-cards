@@ -28,13 +28,21 @@
     font-weight: 700;
     /* border: #b63ee6 2px solid; */
     overflow: hidden;
+    position: relative;
 }
 .container_cards .card_div >img{
     width: 100%;
     /* border: #021b29 2px solid; */
 }
 .container_cards .card_div .card_span{
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    background-color: #07968a;
+    text-align: center;
 
 }
 @media screen and (max-width: 600px){
