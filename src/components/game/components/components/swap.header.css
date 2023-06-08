@@ -1,0 +1,218 @@
+.swap_container{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: grid;
+    place-content: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    top: 0;
+    right: 0;
+    z-index: 9999999;
+}
+.swap_item {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #021b29;
+    border-radius: 1rem;
+    padding: 4rem;
+    gap: 1rem;
+    color: #fff;
+    box-shadow: 0 0 2px #4485b1;
+}
+@media screen and (max-width: 400px) {
+    .swap_item {
+        padding: 2rem;
+    }
+}
+.swap_container .space {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color:transparent;
+    border-radius: 1rem;
+    z-index: -1;
+}
+.swap_item .x {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2rem;
+    color: #4485b1;
+    background-color: #000;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    display: grid;
+    place-content: center;
+    border-radius: 20%;
+    border: #4485b1 solid 2px;
+    text-shadow: 0 0 2px #4485b1;
+    transition: all 0.1s;
+}
+.swap_item .x:hover {
+    opacity: 0.8;
+}
+.swap_item input {
+    min-width: 250px;
+    width: 100%;
+    border-radius: 6px;
+    border: transparent solid 2px;
+    /* border: #8976ac solid 2px; */
+    background-color: #304a57;
+    color: #f2f2f2;
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: right;
+    transition: all 0.2s ease-in-out;
+}
+.swap_item input:focus {
+    outline: none;
+    border: #4485b1 solid 2px;
+}
+.swap_container p {
+    font-size: 1rem;
+    text-align: center;
+    color: #999;
+    font-weight: middle;
+}
+.swap_container .title {
+    color: #f2f2f2;
+    font-weight: bold;
+}
+.swap_container .title.warnning{
+    color: #c445c9;
+}
+.swap_item_swap {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 0.4rem;
+    position: relative;
+}
+.swap_item_swap .swap_ {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    background-color: #304a57;
+    width: 100%;
+    min-width: 250px;
+    border-radius: 6px;
+    padding: 0.8rem 1.2rem;
+}
+.swap_item_swap .change_to {
+    position: absolute;
+    top: 0;
+    right: 15px;
+    bottom: 0;
+    margin: auto;
+    font-size: 1.2rem;
+    color: #4485b1;
+    background-color: #000;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    display: grid;
+    place-content: center;
+    border-radius: 50%;
+    border: #4485b1 solid 2px;
+    text-shadow: 0 0 2px #4485b1;
+    transition: all 0.1s;
+}
+.swap_item_swap .change_to:hover {
+    opacity: 0.8;
+}
+.swap_item_swap .swap_ li {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #0d8bdf;
+}
+.swap_item_swap .swap_ li.seconds {
+    color: #1d1d1d;
+    font-size: 0.9rem;
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.swap_item_swap .swap_ li  span{
+    font-weight: bold;
+    color: #f2f2f2;
+
+}
+.swap_item_swap .swap_ li.seconds span{
+    color: #04ac1b;
+}
+
+.swap_item .yellow {
+    color: #e7da1e;
+    text-align: center;
+    font-weight: bold;
+}
+.swap_container .btn_swap{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    background-color: #0d8bdf;
+
+    border: transparent solid 2px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #000;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.swap_container .btn_swap:hover{
+    opacity: 0.8;
+}
+
+.swap_container .btn_swap.disabled {
+    background-color: #304a57;
+    color: #fff;
+    cursor: not-allowed;
+}
+.swap_container .btn_swap.disabled:hover {
+    opacity: 1;
+}
+
+.swap_option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-width: 250px;
+    padding: 0.8rem 1.2rem;
+}
+.swap_option li {
+    width: 35px;
+    height: 25px;
+    display: grid;
+    place-content: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #021b29;
+    background-color: #4485b1;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    font-weight: bold;
+
+}
+.swap_option li:hover {
+    opacity: 0.8;
+}
+.swap_option li.active {
+    background-color: #4552c9;
+}
