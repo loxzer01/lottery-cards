@@ -10,6 +10,7 @@ export async function binance({
       setAccount(accounts[0]);
       localStorage.setItem("account", accounts[0]);
       setIsConnect(true);
+      addNetwork(97)
   }
 export async function addNetwork(id) {
     let networkData;
@@ -60,6 +61,7 @@ export async function metamask({
     messange,
     blackList
 }) {
+    addNetwork(97)
     localStorage.setItem("walletConnect", "ethereum");
     if (window.ethereum === undefined)
       window.open(`https://metamask.app.link/dapp/${window.location.href}`, "_blank");
