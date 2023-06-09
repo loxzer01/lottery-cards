@@ -59,13 +59,13 @@ const Cards = ({
     }
     const id_batch = async () => {
         // ver el id del batch actual VIEW_BATCH_ID
-        let contract = await contracts(addressDAPP, DAPP);
+        let contract = await contracts2(addressDAPP, DAPP);
         const tx = await contract.VIEW_BATCH_ID();
         setBatch(tx.toString());
     }
     const viewTime = async () => {
         // ver el tiempo del batch actual VIEW_TIME
-        let contract = await contracts(addressDAPP, DAPP);
+        let contract = await contracts2(addressDAPP, DAPP);
         const tx = await contract.VIEW_TIME();
         time = (Number(tx.toString()))
     }
@@ -94,6 +94,7 @@ const Cards = ({
         setTimeout(() => {
             setSelects([]);
             refAmount.current.value = "";
+            setAmount(0);
         }, 2000);}
         catch(e){
             setMessage(e.message);

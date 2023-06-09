@@ -16,9 +16,6 @@ async function contracts(address, abi) {
 }
 
 const Time = () => {
-
-
-    
     return (
         <main className='container_times'>
             <h2>BATCH #{0}</h2>

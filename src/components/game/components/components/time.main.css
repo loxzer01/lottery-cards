@@ -12,3 +12,8 @@
     max-width: 400px;
     border: #fdda13 2px solid;
 }
+@media screen and (max-width:1000px) {
+    .container_times{
+        max-width: 520px;
+    }
+}
