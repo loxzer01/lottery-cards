@@ -3,7 +3,7 @@ import "./time.main.css";
 import { ethers } from 'ethers';
 import DAPP from '../../../../abi/DAPP.json';
 
-const addressDAPP = "0xA96A16878ef0010b7C6cD7d92BE52C9d9BDe87BE";
+const addressDAPP = "0x9144D6921af0efE90B2b4A8Be3EF908C35c09A8a";
 const Newtworks =  {
     prod: "https://bsc-dataseed.binance.org/",
     test: "https://rpc2.sepolia.org"

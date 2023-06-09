@@ -64,11 +64,11 @@ const Swap = ({setIsSwap})=>{
                 b: Number(array_result[0])>0?Number(array_result[0])/10**18:array_result[0],
                 a: Number(array_result[1])>0?Number(array_result[1])/10**18:array_result[1]
             }
-            // let array_balance = {
-            //     a: String(Number(array_result[0])/10**18),
-            //     b: String(Number(array_result[1])/10**18)
-            // }
-          setBalance(array_is.a);
+            let array_balance = {
+                a: String(Number(array_result[0])/10**18),
+                b: String(Number(array_result[1])/10**18)
+            }
+          setBalance(array_balance);
         });
     }
     const _isApprove = async () => {

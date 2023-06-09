@@ -1,3 +1,12 @@
+.text-right {
+    text-align: right;
+    width: 100%;
+    font-size: 1.2rem;
+    /* font-weight: bold; */
+    color: #ff1f0f;
+    padding: 4px;
+}
+
 .container_cards {
     display: flex;
     flex-direction: column;
@@ -74,6 +83,12 @@
     color: #fdda13;
     border: #fdda13 2px solid;
 }
+.container_button .button.disabled {
+    background-color: #fdda13;
+    color: #000;
+    border: #fdda13 2px solid;
+    cursor: not-allowed;
+}
 .clase1{
     position: relative;
     width: 100%;
@@ -93,7 +108,7 @@
     align-items: center;
     flex-direction: column;
     width: 80px;
-    height: 130px;
+    /* height: 130px; */
     cursor: pointer;
     background-color: #fdda13;
     border-radius: 6px;
@@ -103,8 +118,9 @@
     /* border: #b63ee6 2px solid; */
     overflow: hidden;
     position: relative;
-    transition: all 0.1s ease-in-out;
+    transition: all 0.1s linear;
     filter: brightness(0.9);
+    text-align: left;
 
 }
 
@@ -113,25 +129,25 @@
     border: #eaa 3px solid;
 }
 .container_cards .card_div >img{
-    transform: translateY(-10px);
+    /* transform: translateY(-10px); */
     width: 100%;
     /* border: #021b29 2px solid; */
 }
 .container_cards .card_div .card_span{
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: flex-start;
     flex-direction: column;
     font-size: 0.8rem;
     font-weight: bold;
-    position: absolute;
     bottom: 0;
     right: 0;
     left: 0;
     margin: auto;
     background-color: #fdda13;
-    text-align: center;
-    padding: 2px 4px ;
+    text-align: left;
+    padding: 0px 4px ;
     font-weight: bold;
 }
 .container_cards .card_div .card_span span {
@@ -166,6 +182,5 @@
     }
     .container_cards .card_div {
         width: 70px;
-        height: 110px;
     }
 }
