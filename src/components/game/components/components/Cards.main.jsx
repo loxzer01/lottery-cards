@@ -141,7 +141,7 @@ const Cards = ({
         let interval = setInterval(() => {
             _now_time()
         }
-        , 500);
+        , 200);
         return () => clearInterval(interval);
     },[])
     return (
