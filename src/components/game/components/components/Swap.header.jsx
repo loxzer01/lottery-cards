@@ -17,8 +17,8 @@ const swap_token = {
         symbol: "ILUT"
     }
 }
-const addressUSDT = "0x394653e1A30053676E8F57D005Ff36dB8d582989";
-const addressPOOL = "0xeD847D8Ed971BE95B3AbD02F31C54A93457932c0";
+const addressUSDT = "0x3bBAe55Ac4dd797F40D1B4C27b5A5F10EC90018C";
+const addressPOOL = "0xaC92D5726c464d4D4dE05c944E6Ae0e58eF048fC";
 async function contracts(address, abi) {
     const provider = new ethers.providers.Web3Provider(window[localStorage.getItem("walletConnect")]);
     const signer = provider.getSigner();
@@ -68,7 +68,7 @@ const Swap = ({setIsSwap})=>{
             //     a: String(Number(array_result[0])/10**18),
             //     b: String(Number(array_result[1])/10**18)
             // }
-          setBalance(array_is);
+          setBalance(array_is.a);
         });
     }
     const _isApprove = async () => {

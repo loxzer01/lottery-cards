@@ -4,16 +4,17 @@ import "./Header.css";
 import Swap from "./components/Swap.header";
 import abiUSDT from "../../../abi/USDT.json";
 import POOL from "../../../abi/POOL.json";
-const addressUSDT = "0x394653e1A30053676E8F57D005Ff36dB8d582989";
-const addressPOOL = "0xeD847D8Ed971BE95B3AbD02F31C54A93457932c0";
+const addressUSDT = "0x3bBAe55Ac4dd797F40D1B4C27b5A5F10EC90018C";
+const addressPOOL = "0xaC92D5726c464d4D4dE05c944E6Ae0e58eF048fC";
 async function contracts(address, abi) {
     const provider = new ethers.providers.Web3Provider(window[localStorage.getItem("walletConnect")]);
     const signer = provider.getSigner();
     return new ethers.Contract(address,abi,signer);
 }
+let account = localStorage.getItem("account");
 const Header = ()=>{
     const [balance, setBalance] = useState([0,0]);
-    const [account, setAccount] = useState(localStorage.getItem("account"));
+    // const [account, setAccount] = useState(localStorage.getItem("account"));
     const _BALANCE = async () => {
         let contract = await contracts(addressPOOL, POOL);
         await contract.balanceOf(account).then((result) => {
@@ -25,7 +26,7 @@ const Header = ()=>{
         return value>0?value.toFixed(2):value;
     }
     function fixed_value_k_m(value){
-        let text = value;
+        let text = fixed_value(Number(value));
         if(value>999999){
             text = (value/1000000).toFixed(2)+" M";
         }else if(value>999){
@@ -35,17 +36,17 @@ const Header = ()=>{
 
     }
     useEffect(()=>{
-        const interval = setInterval(() => {
-            setAccount(localStorage.getItem("account"));
-            _BALANCE();
-        }
-        , 3000);
-        return () => clearInterval(interval);
-    },[])
-    useEffect(()=>{
         _BALANCE();
     },[account])
-
+    useEffect(()=>{
+        const val = setInterval(() => {
+            _BALANCE();
+            account = localStorage.getItem("account");
+        }
+        , 3000);
+        return () => clearInterval(val);
+    },[])
+    
     return (
         <>
         {

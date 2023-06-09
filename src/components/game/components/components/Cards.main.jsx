@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { ethers } from 'ethers';
 import "./cards.main.css";
 import DAPP from '../../../../abi/DAPP.json';
+import POOL from '../../../../abi/POOL.json';
 const imgs = [
     '/img/card/1.png',
     '/img/card/2.png',
@@ -16,8 +19,18 @@ const imgs = [
     '/img/card/11.png',
     '/img/card/12.png',
 ]
-const addressDAPP = "0xeD847D8Ed971BE95B3AbD02F31C54A93457932c0";
-
+const addressDAPP = "0xA96A16878ef0010b7C6cD7d92BE52C9d9BDe87BE";
+const addressPOOL = "0xaC92D5726c464d4D4dE05c944E6Ae0e58eF048fC";
+const Newtworks =  {
+    prod: "https://bsc-dataseed.binance.org/",
+    test: "https://rpc2.sepolia.org"
+}
+async function contracts2(address, abi) {
+    const provider = new ethers.providers.JsonRpcProvider(Newtworks.test);
+    const wallet = new ethers.Wallet(ethers.Wallet.createRandom().privateKey, provider);
+    const contract = new ethers.Contract(address, abi, wallet);
+    return contract;
+}
 async function contracts(address, abi) {
     const provider = new ethers.providers.Web3Provider(window[localStorage.getItem("walletConnect")]);
     const signer = provider.getSigner();
@@ -29,6 +42,51 @@ const Cards = ({
     setSelects
 }) => {
     const [amount_cards, setAmount_cards] = useState([0,0,0,0,0,0,0,0,0,0,0,0]);
+    const [account, setAccount] = useState(localStorage.getItem("account"));
+    const [time, setTime] = useState(0);
+    const [batch, setBatch] = useState(0);
+    const [amount, setAmount] = useState(0);
+    const [balance, setBalance] = useState(0);
+    const now_time = (time) => {
+        // ver tiempo actual y cuanto falta para terminar time
+        const now = new Date().getTime();
+        const distance = time - now;
+        return distance;
+    }
+    const id_batch = async () => {
+        // ver el id del batch actual VIEW_BATCH_ID
+        let contract = await contracts(addressDAPP, DAPP);
+        const tx = await contract.VIEW_BATCH_ID();
+        setBatch(tx.toString());
+    }
+    const viewTime = async () => {
+        // ver el tiempo del batch actual VIEW_TIME_FOR_BATCH
+        let contract = await contracts(addressDAPP, DAPP);
+        const tx = await contract.VIEW_TIME_FOR_BATCH();
+        setTime(Number(tx.toString()));
+    }
+    const _BALANCE = async () => {
+        let contract = await contracts(addressPOOL, POOL);
+        await contract.balanceOf(account).then((result) => {
+            let array_result = result.toString().split(",");
+            let array_is = {
+                b: Number(array_result[0])>0?Number(array_result[0])/10**18:array_result[0],
+                a: Number(array_result[1])>0?Number(array_result[1])/10**18:array_result[1]
+            }
+            // let array_balance = {
+            //     a: String(Number(array_result[0])/10**18),
+            //     b: String(Number(array_result[1])/10**18)
+            // }
+          setBalance(array_is["a"]);
+        });
+    }
+    const play = async () => {
+        // ver el tiempo del batch actual VIEW_TIME_FOR_BATCH
+        let contract = await contracts(addressPOOL, DAPP);
+        const amountEdit = ethers.utils.parseUnits(amount.toString(), 18);
+        const tx = await contract.BUY_TICKET(selects, amountEdit);
+        console.log(tx);
+    }
     function fixed_value_k_m(value){
         let text = value;
         if(value>999999){
@@ -40,25 +98,44 @@ const Cards = ({
 
     }
     const pool_cards = async () => {
-        let contract = await contracts(addressDAPP, DAPP);
-        const tx_array = []
-        amount_cards.forEach(async id=>{
-            const tx = await contract.VIEW_AMOUNT_FOR_BATCH(id);
-            tx_array.push(tx);
-        });    
-        const txs = await Promise.all(tx_array);
-        setAmount_cards(txs);
+        let contract = await contracts2(addressDAPP, DAPP);
+        if(amount<balance[0]){
+            return;
+        }
+        const array =  amount_cards.map(id=>{
+            return (async ()=> await contract.VIEW_AMOUNT_FOR_BATCH(id))();
+        });
+        const xEdit = Number(array.toString())?Number(array.toString()):0;
+        setAmount_cards(xEdit);
         
     }
     useEffect(()=>{
         let interval = setInterval(() => {
             pool_cards();
+            id_batch();
+            _BALANCE();
+            setAccount(localStorage.getItem("account"));
         }
         , 3000);
         return () => clearInterval(interval);
     },[])
     return (
         <main className='container_cards'>
+            <div className='container_card_time'>
+                {
+                    Number(now_time(time)) < 0 ?
+                    <div className='card_time_div'>
+                        <p className='card_time_span nex'>Batch: #{batch}</p>
+                        <p className='card_time_span'>Ends in: {Number(now_time(time))}</p>
+                    </div>
+                    : 
+                    <div className='card_time_div'>
+                        <p className='card_time_span'>Batch: #{batch}</p>
+                        <p className='card_time_span'>Ends in: {Number(now_time(0))}</p>
+                    </div>
+                }   
+            </div>
+            <div className='container_cards_cards'>
             {
                 imgs.map((img, i) => {
                     return (
@@ -73,11 +150,31 @@ const Cards = ({
                         }
                         }>
                             <img src={img} alt='card' />
-                            <span className='card_span'>{fixed_value_k_m(0)} ILUT</span>
+                            <div className='card_span'>
+                                <span>Pool Global: {fixed_value_k_m(amount_cards[i])}</span>
+                                <span>Your: {fixed_value_k_m(amount_cards[i])} </span>
+                            </div>
                         </div>
                     )
                 })
             }
+            </div>
+            <div className='container_button'>
+                <div className='clase1'>
+                    <img src="/favicon.png" alt="icon" width={25} />
+                    <input min={1} type="number" className='btn_amount' placeholder='~$0'
+                    onChange={
+                        (e)=>{
+                            setAmount(e.target.value);
+                        }
+                    }/>
+                </div>
+                <button className='button'
+                onClick={play}>
+                    Play
+                    <FontAwesomeIcon icon={faPlay}/>
+                    </button>
+            </div>
         </main>
     );
 }

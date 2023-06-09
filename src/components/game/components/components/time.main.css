@@ -1,0 +1,14 @@
+.container_times {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 3rem;
+    background-color: #021b29;
+    border-radius: 10px;
+    gap: 1rem;
+    max-width: 400px;
+    border: #fdda13 2px solid;
+}
